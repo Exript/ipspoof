@@ -49,6 +49,10 @@ pipx install ipspoof
 ```bash
 pip install ipspoof
 ```
+### uv
+```bash
+uv tool install ipspoof
+```
 
 ### From source
 
