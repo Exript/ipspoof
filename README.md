@@ -14,6 +14,7 @@ Your IP is not allowed to use this webservice. Only 10.10.10.x is allowed
 <img width="1210" height="477" alt="resim" src="https://github.com/user-attachments/assets/b3868ae3-1499-401d-bb17-a171ddc822b3" />
 
 ```
+![ipspoof demo](docs/images/1.png)
 
 ---
 
@@ -29,7 +30,7 @@ Your IP is not allowed to use this webservice. Only 10.10.10.x is allowed
 - **Rate limiting** — avoid bans during brute-force.
 - **JSON output** — machine-readable results for reporting.
 - **Interactive mode** — guided prompts for quick runs.
-
+![ipspoof Feature](docs/images/2.png)
 ---
 
 ## Installation
@@ -72,14 +73,8 @@ ipspoof -u http://target/login.php --follow
 
 Output:
 
-```
-[*] Fetching baseline: http://target/login.php
-[*] Baseline -> status=200  size=90  hash=5e114974ece1
+![ipspoof Output](docs/images/3.png)
 
-[*] Phase 1: Header discovery (105 headers x 11 IPs)
-[+] HIT: X-Forwarded-For: 10.10.10.10  ->  status=200 size=1770  [size(90->1770)]
-[*] Phase 1 complete in 16.2s. 4 anomalies.
-```
 
 ### Full pipeline (header discovery + IP fuzz)
 
@@ -115,6 +110,9 @@ ipspoof -u http://target/ --proxy-file proxies.txt --rate 30
 ```bash
 ipspoof -i
 ```
+Output:
+
+![ipspoof Output](docs/images/4.png)
 
 ---
 
