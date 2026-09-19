@@ -284,50 +284,90 @@ def build_test_values(header, ip, chain):
 
 
 def phase2(url, hits, base, args, proxy_rotator, cookies):
-    if not args.ip_pattern:
-        print(f"{Y}[!] --ip-pattern not set, skipping Phase 2.{RST}")
-        return []
-
-    ip_range = parse_range(args.ip_range)
-    headers_to_try = sorted({h.header for h in hits})
-    print(f"{C}[*] Phase 2: IP fuzz  ({len(headers_to_try)} headers x {len(ip_range)} IPs "
-          f"{'+ chain' if args.chain else ''}){RST}")
-    print(f"{DIM}    Headers: {', '.join(headers_to_try)}{RST}")
-
-    tasks = []
-    for h in headers_to_try:
-        for n in ip_range:
-            ip = args.ip_pattern.format(n=n)
-            for v in build_test_values(h, ip, args.chain):
-                tasks.append((h, v, ip))
-
-    results = []
-    total = len(tasks)
-    done = 0
-    t0 = time.time()
-
-    def worker(h, value, ip):
-        proxy = proxy_rotator.next()
-        res = probe(url, {h: value}, args.timeout, args.follow, cookies, proxy, False,
-                    method=args.method, data=args.data, json_data=args.json_data,
-                    limiter=args._limiter)
-        return h, value, ip, res
-
-    with ThreadPoolExecutor(max_workers=args.threads) as ex:
-        futs = [ex.submit(worker, h, v, ip) for h, v, ip in tasks]
-        for f in as_completed(futs):
-            h, value, ip, res = f.result()
-            done += 1
-            if done % 50 == 0 or done == total:
-                print(f"{DIM}    ... {done}/{total}{RST}", end="\r")
-            reasons = is_anomaly(base, res, args)
-            if reasons:
-                r = Result(h, value, res[0], res[1], ",".join(reasons))
-                results.append(r)
-                print(f"\n{G}[+] HIT: {h}: {value}  ->  status={res[0]} size={res[1]}  [{r.reason}]{RST}")
-
-    print(f"\n{C}[*] Phase 2 complete in {time.time()-t0:.1f}s. {len(results)} anomalies.{RST}\n")
-    return results
+        if not args.ip_pattern:
+            print(f"{Y}[!] --ip-pattern not set, skipping Phase 2.{RST}")
+            return []
+    
+        ip_range = parse_range(args.ip_range)
+        headers_to_try = sorted({h.header for h in hits})
+        total_ips = len(ip_range)
+        chain_multiplier = 1 + (4 if args.chain else 0)
+    
+        print(f"{C}[*] Phase 2: IP fuzz  ({len(headers_to_try)} headers x {total_ips} IPs "
+              f"x {chain_multiplier} variation{'s' if chain_multiplier > 1 else ''}){RST}")
+        print(f"{DIM}    Headers: {', '.join(headers_to_try)}{RST}")
+    
+        # Show range preview
+        first_ip = args.ip_pattern.format(n=ip_range[0])
+        last_ip = args.ip_pattern.format(n=ip_range[-1])
+        print(f"{DIM}    Range  : {first_ip} ... {last_ip}  ({total_ips} IPs){RST}")
+    
+        if args.verbose:
+            print(f"{DIM}    Full IP list: {', '.join(args.ip_pattern.format(n=n) for n in ip_range)}{RST}")
+        print()
+    
+        tasks = []
+        for h in headers_to_try:
+            for n in ip_range:
+                ip = args.ip_pattern.format(n=n)
+                for v in build_test_values(h, ip, args.chain):
+                    tasks.append((h, v, ip))
+    
+        results = []
+        tested = {}          # ip -> status
+        total = len(tasks)
+        done = 0
+        t0 = time.time()
+    
+        def worker(h, value, ip):
+            proxy = proxy_rotator.next()
+            res = probe(url, {h: value}, args.timeout, args.follow, cookies, proxy, False,
+                        method=args.method, data=args.data, json_data=args.json_data,
+                        limiter=args._limiter)
+            return h, value, ip, res
+    
+        with ThreadPoolExecutor(max_workers=args.threads) as ex:
+            futs = [ex.submit(worker, h, v, ip) for h, v, ip in tasks]
+            for f in as_completed(futs):
+                h, value, ip, res = f.result()
+                done += 1
+                if done % 50 == 0 or done == total:
+                    print(f"{DIM}    ... {done}/{total}{RST}", end="\r")
+    
+                # Track tested IPs
+                if ip not in tested:
+                    tested[ip] = res[0]
+    
+                if args.verbose and res[0] is not None:
+                    status_str = f"{G}{res[0]}{RST}" if res[0] != base[0] else f"{DIM}{res[0]}{RST}"
+                    print(f"\n{DIM}    [try] {h}: {value}  ->  {status_str} size={res[1]}{RST}")
+    
+                reasons = is_anomaly(base, res, args)
+                if reasons:
+                    r = Result(h, value, res[0], res[1], ",".join(reasons))
+                    results.append(r)
+                    print(f"\n{G}[+] HIT: {h}: {value}  ->  status={res[0]} size={res[1]}  [{r.reason}]{RST}")
+    
+        print(f"\n{C}[*] Phase 2 complete in {time.time()-t0:.1f}s. "
+              f"Tested {len(tested)} unique IPs across {len(headers_to_try)} header(s). "
+              f"{len(results)} anomalies.{RST}")
+    
+        # Show what was tested and what came back
+        if not results:
+            statuses = sorted(set(tested.values()), key=lambda x: (x is None, x))
+            print(f"{Y}[!] No bypass found in this range. "
+                  f"All responses matched baseline (status={base[0]} size={base[1]}).{RST}")
+            print(f"{DIM}    Status codes seen: {', '.join(str(s) for s in statuses)}{RST}")
+            print(f"{DIM}    Tip: try a wider range (--ip-range 1-254), different pattern "
+                  f"(--ip-pattern), or --chain for XFF variations.{RST}")
+        else:
+            print(f"{C}[*] Phase 2 summary:{RST}")
+            for r in results:
+                print(f"    {G}{r.header:<30}{RST} value={r.value:<20} "
+                      f"status={r.status} size={r.size}  [{r.reason}]")
+    
+        print()
+        return results
 
 
 def parse_range(s):
@@ -429,7 +469,7 @@ def interactive_setup(base_args):
 # ═════════════════════════════════════════════════════════
 # MAIN
 # ═════════════════════════════════════════════════════════
-EPILOG = f"""
+EPILOG ="""
 {B}ADVANCED FEATURES (opt-in):{RST}
   --proxy-file FILE      Rotate through a list of proxies
   --tor                  Route through Tor SOCKS5 (127.0.0.1:9050)
@@ -440,10 +480,14 @@ EPILOG = f"""
   --body-regex PATTERN   Only treat body regex match as HIT
   --size-tol X           Size difference tolerance (default 0.05 = 5%)
   -o/--output FILE       Save results as JSON
+  -v, --verbose          Print each request/response in Phase 2
 
 {B}EXAMPLES:{RST}
   # Basic
-  ipspoof -u http://target/login.php --follow
+  ipspoof -u http://target/ --follow
+
+  # Interactive
+  ipspoof -i
 
   # POST login attempt
   ipspoof -u http://target/login.php -X POST -d "user=a&pass=b"
@@ -457,8 +501,9 @@ EPILOG = f"""
   # Proxy list + rate-limit
   ipspoof -u http://target/ --proxy-file proxies.txt --rate 30
 
-  # Interactive
-  ipspoof -i
+  
+  # Verbose Phase 2 (see every IP tried)
+  ipspoof -u http://target/ --phase2 --ip-pattern "127.0.0.{{n}}" -v
 """
 
 
@@ -503,6 +548,7 @@ def build_argparser():
     ap.add_argument("--ip-range", default="1-254", help="Phase 2 IP range")
     ap.add_argument("--show-all", action="store_true", help="Debug: show all responses")
     ap.add_argument("-o", "--output", help="Save results as JSON file")
+    ap.add_argument("-v", "--verbose", action="store_true", help="Print each request/response detail (Phase 2)")
     return ap
 
 
@@ -517,13 +563,16 @@ def main(argv=None):
         ap.print_help()
         sys.exit(2)
 
-    print(f"{C}┌──────────────────────────────────────────────┐")
-    print(f"│ ipspoof v2.0.0 — header/IP allowlist bypass   │")
-    print(f"└──────────────────────────────────────────────┘{RST}")
-    print(f"  URL       : {args.url}")
-    print(f"  Method    : {args.method}")
-    print(f"  Threads   : {args.threads}")
-    print(f"  Follow    : {args.follow}")
+    from . import __version__
+
+    title = f"ipspoof v{__version__} — header/IP allowlist bypass"
+    author = "Created by Exript"
+    width = 46
+
+    print(f"{C}┌{'─' * (width + 2)}┐")
+    print(f"│ {title:<{width}} │")
+    print(f"│ {author:<{width}} │")
+    print(f"└{'─' * (width + 2)}┘{RST}")
     if args.body_regex:
         print(f"  Body regex: {args.body_regex}")
     if args.body_hash:

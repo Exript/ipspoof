@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ipspoof"
-version = "2.0.2"
+version = "2.0.3"
 description = "HTTP header/IP allowlist bypass discovery tool for authorized security testing"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
