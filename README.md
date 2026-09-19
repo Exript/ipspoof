@@ -205,4 +205,4 @@ pip install -e ".[dev]"
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](https://github.com/Exript/ipspoof/blob/main/LICENSE).

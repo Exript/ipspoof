@@ -33,3 +33,8 @@ All notable changes to this project will be documented here.
 
 ### Fixed
 - Images now use absolute GitHub raw URLs so they render correctly on PyPI
+## [2.0.2] - 2026-09-19
+
+### Fixed
+- Added content-type to readme field so PyPI renders markdown correctly
+- Fixed LICENSE link to use absolute GitHub URL
