@@ -68,6 +68,18 @@ For Tor support:
 pipx install "ipspoof[tor]"
 ```
 
+### pipx vs uvx vs uv tool
+
+| Feature | pipx | uvx | uv tool |
+|---------|------|-----|---------|
+| One-off run | `pipx run ipspoof` | `uvx ipspoof` | — |
+| Install permanently | `pipx install ipspoof` | — | `uv tool install ipspoof` |
+| Speed | Slow (pip backend) | ⚡ Fast (Rust) | ⚡ Fast |
+| Cache | 14-day TTL | No TTL | No TTL |
+| Python auto-install | Optional | ✅ Built-in | ✅ Built-in |
+| Cross-platform | ✅ | ✅ | ✅ |
+
+**TL;DR:** `uvx` for one-off runs, `uv tool install` for permanent installs, `pipx` if you already use it.
 ---
 
 ## Usage
