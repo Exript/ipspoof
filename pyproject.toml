@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ipspoof"
+version = "2.0.0"
+description = "HTTP header/IP allowlist bypass discovery tool for authorized security testing"
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "Your Name", email = "you@example.com" }
+]
+keywords = ["security", "pentest", "bugbounty", "ip-spoof", "header-bypass", "xff", "x-forwarded-for", "allowlist"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+]
+dependencies = [
+    "requests>=2.28",
+    "urllib3>=1.26",
+]
+
+[project.optional-dependencies]
+tor = ["requests[socks]>=2.28"]
+dev = ["build", "twine", "pytest"]
+
+[project.scripts]
+ipspoof = "ipspoof.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/yourname/ipspoof"
+Repository = "https://github.com/yourname/ipspoof"
+Issues = "https://github.com/yourname/ipspoof/issues"
+Changelog = "https://github.com/yourname/ipspoof/blob/main/CHANGELOG.md"
+
+[tool.setuptools]
+packages = ["ipspoof"]
+
+[tool.setuptools.package-data]
+ipspoof = ["py.typed"]
