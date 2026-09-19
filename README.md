@@ -13,8 +13,6 @@
 
 ```
 Your IP is not allowed to use this webservice. Only 10.10.10.x is allowed
-<img width="1210" height="477" alt="resim" src="https://github.com/user-attachments/assets/b3868ae3-1499-401d-bb17-a171ddc822b3" />
-
 ```
 ![ipspoof demo](docs/images/1.jpeg)
 
