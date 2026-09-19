@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented here.
 
+## [1.0.0] - 2026-09-15
+
+### Added
+- Initial release
+- Header discovery (100+ headers)
+- IP fuzzing (Phase 2)
+- Baseline anomaly detection
+
 ## [2.0.0] - 2026-09-19
 
 ### Added
@@ -22,13 +30,6 @@ All notable changes to this project will be documented here.
 - Installable via `pipx install ipspoof`
 - English-only output
 
-## [1.0.0] - 2026-09-18
-
-### Added
-- Initial release
-- Header discovery (100+ headers)
-- IP fuzzing (Phase 2)
-- Baseline anomaly detection
 ## [2.0.1] - 2026-09-19
 
 ### Fixed
