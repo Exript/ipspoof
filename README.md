@@ -2,7 +2,9 @@
 
 > HTTP header/IP allowlist bypass discovery tool for authorized security testing.
 
-[![PyPI](https://img.shields.io/badge/pypi-v2.0.0-blue)](https://pypi.org/project/ipspoof/)
+[![PyPI version](https://img.shields.io/pypi/v/ipspoof)](https://pypi.org/project/ipspoof/)
+[![PyPI - Python versions](https://img.shields.io/pypi/pyversions/ipspoof)](https://pypi.org/project/ipspoof/)
+[![Downloads](https://img.shields.io/pypi/dm/ipspoof)](https://pypi.org/project/ipspoof/)
 [![Python](https://img.shields.io/badge/python-3.8+-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20windows-lightgrey)]()
