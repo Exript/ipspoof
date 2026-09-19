@@ -7,11 +7,10 @@ name = "ipspoof"
 version = "2.0.1"
 description = "HTTP header/IP allowlist bypass discovery tool for authorized security testing"
 readme = "README.md"
-readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [
-    { name = "Exript", email = "" }
+    { name = "Exript", email = "exript@users.noreply.github.com" }
 ]
 keywords = ["security", "pentest", "bugbounty", "ip-spoof", "header-bypass", "xff", "x-forwarded-for", "allowlist"]
 classifiers = [
