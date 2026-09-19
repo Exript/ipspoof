@@ -14,7 +14,7 @@ Your IP is not allowed to use this webservice. Only 10.10.10.x is allowed
 <img width="1210" height="477" alt="resim" src="https://github.com/user-attachments/assets/b3868ae3-1499-401d-bb17-a171ddc822b3" />
 
 ```
-![ipspoof demo](docs/images/1.png)
+![ipspoof demo](docs/images/1.jpeg)
 
 ---
 
@@ -30,7 +30,7 @@ Your IP is not allowed to use this webservice. Only 10.10.10.x is allowed
 - **Rate limiting** — avoid bans during brute-force.
 - **JSON output** — machine-readable results for reporting.
 - **Interactive mode** — guided prompts for quick runs.
-![ipspoof Feature](docs/images/2.png)
+![ipspoof Feature](docs/images/2.jpeg)
 ---
 
 ## Installation
@@ -73,7 +73,7 @@ ipspoof -u http://target/login.php --follow
 
 Output:
 
-![ipspoof Output](docs/images/3.png)
+![ipspoof Output](docs/images/3.jpeg)
 
 
 ### Full pipeline (header discovery + IP fuzz)
@@ -112,7 +112,7 @@ ipspoof -i
 ```
 Output:
 
-![ipspoof Output](docs/images/4.png)
+![ipspoof Output](docs/images/4.jpeg)
 
 ---
 
