@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ipspoof"
-version = "2.0.0"
+version = "2.0.1"
 description = "HTTP header/IP allowlist bypass discovery tool for authorized security testing"
 readme = "README.md"
+readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [
-    { name = "Your Name", email = "you@example.com" }
+    { name = "Exript", email = "" }
 ]
 keywords = ["security", "pentest", "bugbounty", "ip-spoof", "header-bypass", "xff", "x-forwarded-for", "allowlist"]
 classifiers = [
@@ -40,10 +41,10 @@ dev = ["build", "twine", "pytest"]
 ipspoof = "ipspoof.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/yourname/ipspoof"
-Repository = "https://github.com/yourname/ipspoof"
-Issues = "https://github.com/yourname/ipspoof/issues"
-Changelog = "https://github.com/yourname/ipspoof/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/Exript/ipspoof"
+Repository = "https://github.com/Exript/ipspoof"
+Issues = "https://github.com/Exript/ipspoof/issues"
+Changelog = "https://github.com/Exript/ipspoof/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 packages = ["ipspoof"]

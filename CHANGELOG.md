@@ -29,3 +29,7 @@ All notable changes to this project will be documented here.
 - Header discovery (100+ headers)
 - IP fuzzing (Phase 2)
 - Baseline anomaly detection
+## [2.0.1] - 2026-09-19
+
+### Fixed
+- Images now use absolute GitHub raw URLs so they render correctly on PyPI
