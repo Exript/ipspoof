@@ -5,7 +5,7 @@
       <stop offset="100%" stop-color="#302b6a"/>
     </linearGradient>
   </defs>
-  <rect width="800" height="200" fill="url(#g)"/>
+  <rect width="1200" height="200" fill="url(#g)"/>
   <text x="400" y="95" font-family="monospace" font-size="52" 
         fill="#00ff7f" text-anchor="middle" font-weight="bold">
     IPSPOOF
