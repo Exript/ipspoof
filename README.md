@@ -9,7 +9,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macOS%20%7C%20windows-lightgrey)]()
 
-![IPSpof Banner](https://raw.githubusercontent.com/Exript/ipspoof/main/banner.svg)
+  ![IPSpof Banner](https://raw.githubusercontent.com/Exript/ipspoof/main/banner.svg)
 
 `ipspoof` helps pentesters and bug bounty hunters quickly identify which HTTP header a web application trusts for client-IP-based access control, and which IP range bypasses the allowlist. Common in labs, CTFs, and real-world engagements where you see messages like:
 
